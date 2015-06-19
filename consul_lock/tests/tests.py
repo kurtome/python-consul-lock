@@ -1,8 +1,8 @@
 from unittest import TestCase
 
 import consul
-from consul_locks import defaults
-from consul_locks import EphemeralLock
+from consul_lock import defaults
+from consul_lock import EphemeralLock
 from mock import patch
 from mock import MagicMock
 
