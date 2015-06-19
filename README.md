@@ -23,8 +23,7 @@ The ephemeral lock is implemented with Consul's [session](http://python-consul.r
 Example
 -------
 
-.. code:: python
-
+```python
     import consul
     import consul_locks
     from consul_locks import EphemeralLock
@@ -36,4 +35,4 @@ Example
     with ephemeral_lock.hold():
         # do dangerous stuff here
         print 'here be dragons'
-
+```
