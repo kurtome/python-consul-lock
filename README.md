@@ -25,11 +25,11 @@ Example
 
 ```python
 import consul
-import consul_locks
+import consul_lock
 from consul_locks import EphemeralLock
 
 consul_client = consul.Consul()
-consul_locks.defaults.consul_client = consul_client
+consul_lock.defaults.consul_client = consul_client
 
 ephemeral_lock = EphemeralLock('my/special/key', acquire_timeout_ms=500)
 with ephemeral_lock.hold():
