@@ -26,7 +26,7 @@ Example
 ```python
 import consul
 import consul_lock
-from consul_locks import EphemeralLock
+from consul_lock import EphemeralLock
 
 consul_client = consul.Consul()
 consul_lock.defaults.consul_client = consul_client
