@@ -67,3 +67,20 @@ class EphemeralLockTests(TestCase):
         self.mock_consul.session.destroy.asssert_called_once(
             session=self.session_id
         )
+
+    def test_release_gracefully_if_never_locked(self):
+        lock = EphemeralLock(self.key)
+        self.mock_consul.session.create.side_effect = consul.Timeout('unable to create session')
+        try:
+            with lock.hold():
+                self.fail('should have raised an exception')
+        except consul.Timeout:
+            pass
+        self.mock_consul.session.create.asssert_called_once(
+            lock_delay=0,
+            ttl=180,
+            behavior='destroy',
+        )
+        self.assertEquals([], self.mock_consul.kv.put.mock_calls)
+        self.assertEquals([], self.mock_consul.session.destroy.mock_calls)
+

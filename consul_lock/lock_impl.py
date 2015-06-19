@@ -75,7 +75,6 @@ class EphemeralLock(object):
         """
         assert not self._started_locking, 'can only lock once'
         assert not self._started_locking, 'can only lock once'
-        self._started_locking = True
         start_time = time.time()
 
         # how long to hold locks after session times out.
@@ -94,6 +93,8 @@ class EphemeralLock(object):
             ttl=session_ttl,
             behavior=session_invalidate_behavior
         )
+
+        self._started_locking = True
 
         is_success = False
 
@@ -129,10 +130,10 @@ class EphemeralLock(object):
 
     def release(self):
         """
-        Release the lock immediately.
+        Release the lock immediately. Does nothing if never locked.
         """
-        assert self._started_locking, 'must have locked before releasing'
-        assert self.session_id, 'must have a session id to acquire lock'
+        if not self._started_locking:
+            return False
 
         # destroying the session will is the safest way to release the lock. we'd like to delete the
         # key, but since it's possible we don't actually have the lock anymore (in distributed systems, there is no spoon)
