@@ -24,15 +24,15 @@ Example
 -------
 
 ```python
-    import consul
-    import consul_locks
-    from consul_locks import EphemeralLock
+import consul
+import consul_locks
+from consul_locks import EphemeralLock
 
-    consul_client = consul.Consul()
-    consul_locks.defaults.consul_client = consul_client
+consul_client = consul.Consul()
+consul_locks.defaults.consul_client = consul_client
 
-    ephemeral_lock = EphemeralLock('my/special/key', acquire_timeout_ms=500)
-    with ephemeral_lock.hold():
-        # do dangerous stuff here
-        print 'here be dragons'
+ephemeral_lock = EphemeralLock('my/special/key', acquire_timeout_ms=500)
+with ephemeral_lock.hold():
+    # do dangerous stuff here
+    print 'here be dragons'
 ```
