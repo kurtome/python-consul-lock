@@ -1,4 +1,4 @@
-# Python Consul Locks
+# Python Consul Lock
 
 Simple locking client built on top of [python-consul](https://github.com/cablehead/python-consul).
 
