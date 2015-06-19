@@ -1,6 +1,6 @@
 # Python Consul Locks
 
-Simple locking client built on top of `python-consul <https://github.com/cablehead/python-consul>`.
+Simple locking client built on top of [python-consul](https://github.com/cablehead/python-consul).
 
 
 Ephemeral Lock
@@ -17,13 +17,14 @@ lock is never released due to code crashes. No guarentees are made about the beh
 the lock for longer than its maximum lifespan (lock_timeout_seconds), Consul may release the lock at any point after 
 the timeout.
 
-The ephemeral lock is implemented with Consul's `session <http://python-consul.readthedocs.org/en/latest/#consul-session>` and `kv <http://python-consul.readthedocs.org/en/latest/#consul-kv>` API and the key/value associated with the lock will be deleted upon release.
+The ephemeral lock is implemented with Consul's [session](http://python-consul.readthedocs.org/en/latest/#consul-session) and [kv] (http://python-consul.readthedocs.org/en/latest/#consul-kv) API and the key/value associated with the lock will be deleted upon release.
 
 
 Example
 -------
 
 .. code:: python
+
     import consul
     import consul_locks
     from consul_locks import EphemeralLock
