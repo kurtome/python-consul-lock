@@ -90,3 +90,6 @@ Well, that really depends on what you're doing, but generally [distributed locks
 
 #### Is the lock reentrant?
 Nope, so be careful not to deadlock! It could be implemented since Consul's session API allows the same session to reacquire the same locked key, feel free to submit a pull request if you want that.
+
+#### Has anyone actually asked any of these questions?
+Nope.
