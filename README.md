@@ -20,19 +20,43 @@ the timeout.
 The ephemeral lock is implemented with Consul's [session](http://python-consul.readthedocs.org/en/latest/#consul-session) and [kv] (http://python-consul.readthedocs.org/en/latest/#consul-kv) API and the key/value associated with the lock will be deleted upon release.
 
 
-Example
--------
+### Examples
 
+In order to create a lock, you must either pass in a reference to a `consul.Consul` client each time, or assign a default client to use.
+
+##### Setup `consul_lock` defaults
 ```python
 import consul
 import consul_lock
-from consul_lock import EphemeralLock
+
 
 consul_client = consul.Consul()
 consul_lock.defaults.consul_client = consul_client
+```
+
+The simplest way to use a lock is in a `with` block as a context manager. The lock will be automatically released then the `with` block exits.
+
+##### Creating and holding a lock with as a context manager
+```python
+from consul_lock import EphemeralLock
 
 ephemeral_lock = EphemeralLock('my/special/key', acquire_timeout_ms=500)
 with ephemeral_lock.hold():
     # do dangerous stuff here
     print 'here be dragons'
+```
+
+It is also possible to manually acquire and release the lock. The following is equivalent to the previous example.
+
+##### Creating a lock and acquiring and releasing it explicitly
+```python
+from consul_lock import EphemeralLock
+
+ephemeral_lock = EphemeralLock('my/special/key', acquire_timeout_ms=500)
+try:
+    ephemeral_lock.acquire()
+    # do dangerous stuff here
+    print 'here be dragons'
+finally:
+    ephemeral_lock.release()
 ```

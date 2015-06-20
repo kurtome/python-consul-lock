@@ -62,7 +62,7 @@ class EphemeralLock(object):
         self.session_id = None
         self._started_locking = False
 
-    def lock(self, fail_hard=True):
+    def acquire(self, fail_hard=True):
         """
         Attempt to acquire the lock.
 
@@ -100,7 +100,7 @@ class EphemeralLock(object):
 
         max_loop_iter = 1000 #  don't loop forever
         for attempt_number in range(0, max_loop_iter):
-            is_success = self._acquire()
+            is_success = self._acquire_consul_key()
 
             # exponential backoff yo
             sleep_ms = 50 * pow(attempt_number, 2)
@@ -118,7 +118,7 @@ class EphemeralLock(object):
         else:
             return is_success
 
-    def _acquire(self):
+    def _acquire_consul_key(self):
         assert self.session_id, 'must have a session id to acquire lock'
 
         value = defaults.generate_value()
@@ -151,7 +151,7 @@ class EphemeralLock(object):
         Context manager for holding the lock
         """
         try:
-            self.lock(fail_hard=True)
+            self.acquire(fail_hard=True)
             yield
         finally:
             self.release()
