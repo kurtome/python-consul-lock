@@ -89,7 +89,9 @@ Use at your own risk, this code is young and has hopes and dreams of being battl
 Well, that really depends on what you're doing, but generally [distributed locks](https://en.wikipedia.org/wiki/Distributed_lock_manager) are useful to prevent [race conditions](https://en.wikipedia.org/wiki/Race_condition).
 
 #### Is the lock reentrant?
-Nope, so be careful not to deadlock! It could be implemented since Consul's session API allows the same session to reacquire the same locked key, feel free to submit a pull request if you want that.
+Nope, so be careful not to deadlock! If you somehow try to lock the same key while already holding a lock on that key, it will always fail until something times out.
+
+Reentrant locking could be implemented since Consul's session API allows the same session to reacquire the same locked key, feel free to submit a pull request if you want that.
 
 #### Has anyone actually asked any of these questions?
 Nope.
