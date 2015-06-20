@@ -78,3 +78,15 @@ try:
 finally:
     ephemeral_lock.release()
 ```
+
+FAQ
+---
+
+#### Is this "production ready"?
+Use at your own risk, this code is young and has hopes and dreams of being battletested and rugged someday.
+
+#### Why is this useful?
+Well, that really depends on what you're doing, but generally [distributed locks](https://en.wikipedia.org/wiki/Distributed_lock_manager) are useful to prevent [race conditions](https://en.wikipedia.org/wiki/Race_condition).
+
+#### Is the lock reentrant?
+Nope, so be careful not to deadlock! It could be implemented since Consul's session API allows the same session to reacquire the same locked key, feel free to submit a pull request if you want that.
