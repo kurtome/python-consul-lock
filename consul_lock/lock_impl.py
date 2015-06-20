@@ -56,7 +56,7 @@ class EphemeralLock(object):
 
         self._key = key
         assert key, 'key is required for locking.'
-        self._full_key = 'oyster/api/locks/ephemeral/%s' % key
+        self._full_key = defaults.lock_key_pattern % key
         self.lock_timeout_seconds = _coerce_required(lock_timeout_seconds, 'lock_timeout_seconds')
         self.acquire_timeout_ms = _coerce_required(acquire_timeout_ms, 'acquire_timeout_ms')
         self.session_id = None
