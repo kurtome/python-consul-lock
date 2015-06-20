@@ -48,7 +48,7 @@ class EphemeralLockTests(TestCase):
 
     def test_simple_success(self):
         lock = EphemeralLock(self.key)
-        lock.lock()
+        lock.acquire()
 
         self.mock_consul.session.create.assert_called_once_with(
             lock_delay=0,
@@ -84,7 +84,7 @@ class EphemeralLockTests(TestCase):
             lock_timeout_seconds=lock_timeout_seconds,
             consul_client=mock_consul,
         )
-        lock.lock()
+        lock.acquire()
         mock_consul.session.create.assert_called_once_with(
             lock_delay=0,
             ttl=lock_timeout_seconds,
