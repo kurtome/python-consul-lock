@@ -15,9 +15,9 @@ lock_timeout_seconds = 60 * 3
 lock_key_pattern = 'locks/ephemeral/%s'
 
 import json
-import datetime
+from datetime import datetime
 def _json_date_value():
-    json.dumps(dict(
+    return json.dumps(dict(
         locked_at=str(datetime.now())
     ))
 
