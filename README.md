@@ -60,3 +60,38 @@ try:
 finally:
     ephemeral_lock.release()
 ```
+
+By default acquiring a lock (with `acquire` or `hold`) is assumed to be a critical operation and will throw an exception if it is unable to acquire the lock within the specified timeout. Sometimes it may be desirable to react to the fact that the lock is being held concurrently by some other code or host. In that case you can set the `fail_hard` option and `acquire` will return whether or not is was able to acquire the lock.
+
+#### Reacting to `acquire` attempt
+```python
+from consul_lock import EphemeralLock
+
+ephemeral_lock = EphemeralLock('my/special/key', acquire_timeout_ms=500)
+try:
+    was_acquired = ephemeral_lock.acquire(fail_hard=False)
+    if was_acquired:
+        # do dangerous stuff here
+        print 'here be dragons'
+    else:
+        print 'someone else has the lock :\ try again later'
+finally:
+    ephemeral_lock.release()
+```
+
+FAQ
+---
+
+#### Is this "production ready"?
+Use at your own risk, this code is young and has hopes and dreams of being battletested and rugged someday.
+
+#### Why is this useful?
+Well, that really depends on what you're doing, but generally [distributed locks](https://en.wikipedia.org/wiki/Distributed_lock_manager) are useful to prevent [race conditions](https://en.wikipedia.org/wiki/Race_condition).
+
+#### Is the lock reentrant?
+Nope, so be careful not to deadlock! If you somehow try to lock the same key while already holding a lock on that key, it will always fail until something times out.
+
+Reentrant locking could be implemented since Consul's session API allows the same session to reacquire the same locked key, feel free to submit a pull request if you want that.
+
+#### Has anyone actually asked any of these questions?
+Nope.
