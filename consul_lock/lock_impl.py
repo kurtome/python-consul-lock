@@ -49,18 +49,21 @@ class EphemeralLock(object):
         :param acquire_timeout_ms: how long the caller is willing to wait to acquire the lock
         :param lock_timeout_seconds: how long the lock will stay alive if it is never released,
             this is controlled by Consul's Session TTL and may stay alive a bit longer according
-            to their docs.
+            to their docs. As of the current version of Consul, this must be between 10s and 3600s
         :param consul_client: client to use instead of the one defined in Settings
         """
         self._consul = _coerce_required(consul_client, 'consul_client')
 
-        self._key = key
+        self.key = key
         assert key, 'key is required for locking.'
-        self._full_key = defaults.lock_key_pattern % key
+        self.full_key = defaults.lock_key_pattern % key
         self.lock_timeout_seconds = _coerce_required(lock_timeout_seconds, 'lock_timeout_seconds')
         self.acquire_timeout_ms = _coerce_required(acquire_timeout_ms, 'acquire_timeout_ms')
         self.session_id = None
         self._started_locking = False
+        assert lock_timeout_seconds >= 10 and lock_timeout_seconds <= 3600, \
+            'lock_timeout_seconds must be between 10 and 3600 to due to Consul\'s session ttl settings'
+
 
     def acquire(self, fail_hard=True):
         """
@@ -86,7 +89,7 @@ class EphemeralLock(object):
         session_ttl = self.lock_timeout_seconds
 
         # delete locks when session is invalidated/destroyed
-        session_invalidate_behavior = 'destroy'
+        session_invalidate_behavior = 'delete'
 
         self.session_id = self._consul.session.create(
             lock_delay=session_lock_delay,
@@ -104,17 +107,20 @@ class EphemeralLock(object):
 
             # exponential backoff yo
             sleep_ms = 50 * pow(attempt_number, 2)
-            elapsed_time_ms = int(1000 * round(time.time() - start_time))
+            elapsed_time_ms = int(round(1000 * (time.time() - start_time)))
+            time_left_ms = self.acquire_timeout_ms - elapsed_time_ms
+            sleep_ms = min(time_left_ms, sleep_ms)
 
-            retry_acquire = (not is_success) and ((elapsed_time_ms + sleep_ms) > self.acquire_timeout_ms)
+            retry_acquire = (not is_success) and (time_left_ms > 0)
 
             if retry_acquire:
-                time.sleep(sleep_ms / 1000.0)
+                sleep_seconds_float = sleep_ms / 1000.0
+                time.sleep(sleep_seconds_float)
             else:
                 break
 
         if not is_success and fail_hard:
-            raise LockAcquisitionException("Failed to acquire %s" % self._key)
+            raise LockAcquisitionException("Failed to acquire %s" % self.full_key)
         else:
             return is_success
 
@@ -123,7 +129,7 @@ class EphemeralLock(object):
 
         value = defaults.generate_value()
         return self._consul.kv.put(
-            key=self._full_key,
+            key=self.full_key,
             value=value,
             acquire=self.session_id
         )
