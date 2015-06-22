@@ -2,6 +2,11 @@
 
 Simple locking client built on top of [python-consul](https://github.com/cablehead/python-consul).
 
+Installation
+------------
+```
+pip install consul-lock
+```
 
 Ephemeral Lock
 --------------
@@ -83,7 +88,7 @@ FAQ
 ---
 
 #### Is this "production ready"?
-Use at your own risk, this code is young and has hopes and dreams of being battletested and rugged someday.
+Use at your own risk, this code is young and has hopes and dreams of being battletested and rugged someday. Oyster has been using this in production since tag (0.1.4)[https://github.com/oysterbooks/python-consul-lock/tree/0.1.4].
 
 #### Why is this useful?
 Well, that really depends on what you're doing, but generally [distributed locks](https://en.wikipedia.org/wiki/Distributed_lock_manager) are useful to prevent [race conditions](https://en.wikipedia.org/wiki/Race_condition).
