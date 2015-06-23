@@ -18,30 +18,29 @@ locked that key concurrently.
 Usable with `lock`/`release` in a try/finally block, or more easily via the the `hold` method in a with block.
 By default acquiring the lock is assumed to be a critical path, and will throw an exception if unable to acquire.
 The lock has a maximum (configurable) lifespan, which can prevent deadlocks or stale locks in the event that a
-lock is never released due to code crashes. No guarentees are made about the behavior if a client continues to hold
-the lock for longer than its maximum lifespan (lock_timeout_seconds), Consul may release the lock at any point after 
-the timeout.
+lock is never released due to code crashes. 
+
+No guarentees are made about the behavior if a client continues to hold
+the lock for longer than its maximum lifespan (`lock_timeout_seconds`), Consul will release the lock at some point soon after the timeout. This is a good in thing, it is in fact the entire point of an ephemeral lock, because it makes it nearly impossible for stale locks to gum up whatever you are processing. The ideal setup if to configure the `lock_timeout_seconds` to be just long enough that there is no way your critical block could still be running, so it's safe enough to assume that the code that originally acquired the lock simply died.
 
 The ephemeral lock is implemented with Consul's [session](http://python-consul.readthedocs.org/en/latest/#consul-session) and [kv] (http://python-consul.readthedocs.org/en/latest/#consul-kv) API and the key/value associated with the lock will be deleted upon release.
 
-
 ### Examples
 
+##### Setup `consul_lock` defaults
 In order to create a lock, you must either pass in a reference to a `consul.Consul` client each time, or assign a default client to use.
 
-##### Setup `consul_lock` defaults
 ```python
 import consul
 import consul_lock
-
 
 consul_client = consul.Consul()
 consul_lock.defaults.consul_client = consul_client
 ```
 
+##### Creating and holding a lock with as a context manager
 The simplest way to use a lock is in a `with` block as a context manager. The lock will be automatically released then the `with` block exits.
 
-##### Creating and holding a lock with as a context manager
 ```python
 from consul_lock import EphemeralLock
 
@@ -51,9 +50,9 @@ with ephemeral_lock.hold():
     print 'here be dragons'
 ```
 
+##### Creating a lock and acquiring and releasing it explicitly
 It is also possible to manually acquire and release the lock. The following is equivalent to the previous example.
 
-##### Creating a lock and acquiring and releasing it explicitly
 ```python
 from consul_lock import EphemeralLock
 
@@ -66,9 +65,9 @@ finally:
     ephemeral_lock.release()
 ```
 
+##### Reacting to `acquire` attempt
 By default acquiring a lock (with `acquire` or `hold`) is assumed to be a critical operation and will throw an exception if it is unable to acquire the lock within the specified timeout. Sometimes it may be desirable to react to the fact that the lock is being held concurrently by some other code or host. In that case you can set the `fail_hard` option and `acquire` will return whether or not is was able to acquire the lock.
 
-#### Reacting to `acquire` attempt
 ```python
 from consul_lock import EphemeralLock
 
@@ -84,19 +83,37 @@ finally:
     ephemeral_lock.release()
 ```
 
+### Lock configuration
+
+Most of these settings can be both configured in `consul_locks.defaults` and overridden on each creation of the lock as keyword argments to the lock class. 
+
+ - `consul_client` - The instance of `consul.Consul` to use for accessing the Consul API. (no default, must be set or overridden)
+
+ - `acquire_timeout_ms` - How long, in milliseconds, the caller is willing to wait to acquire the lock. When set to 0 lock acquisition will fail if the lock cannot be acquired immediately. (default = 0)
+
+ - `lock_timeout_seconds` - How long, in seconds, the lock will stay alive if it is never released, this is controlled by Consul's Session TTL and may stay alive a bit longer according to their docs. As of the current version of Consul, this must be between 10 and 3600. (default = 180)
+
+ - `lock_key_pattern` - A format string which will be combined with the `key` parameter for each lock to determine the full key path in Consul's key/value store. Useful for setting up a prefix path which all locks live under. This can only be set in `consul_locks.defaults`. (default = `'locks/ephemeral/%s'`)
+
+ - `generate_value` - This can only be set in the `consul_locks.defaults`. (defaults to a function returning a JSON string containing `"locked_at": str(datetime.now())`)
+
+
 FAQ
 ---
 
-#### Is this "production ready"?
+##### Is this "production ready"?
 Use at your own risk, this code is young and has hopes and dreams of being battletested and rugged someday. Oyster has been using this in production since tag [0.1.4](https://github.com/oysterbooks/python-consul-lock/tree/0.1.4).
 
-#### Why is this useful?
+##### Why is this useful?
 Well, that really depends on what you're doing, but generally [distributed locks](https://en.wikipedia.org/wiki/Distributed_lock_manager) are useful to prevent [race conditions](https://en.wikipedia.org/wiki/Race_condition).
 
-#### Is the lock reentrant?
+##### Ephemeral?!
+So, you may be asking yourself, "I just double checked the definition for ephemeral, and dissapearing locks doen't sound too safe...wtf?" There is something to be said for not being too safe, if locks never dissapeared then what would happen if a [chaos monkey](http://techblog.netflix.com/2011/07/netflix-simian-army.html) came in and unplugged the server that acquired the lock? It would never be released, and you'd have to go in by hand and delete the lock in order to run your critical block of code.
+
+##### Is the lock reentrant?
 Nope, so be careful not to deadlock! If you somehow try to lock the same key while already holding a lock on that key, it will always fail until something times out.
 
 Reentrant locking could be implemented since Consul's session API allows the same session to reacquire the same locked key, feel free to submit a pull request if you want that.
 
-#### Has anyone actually asked any of these questions?
+##### Has anyone actually asked any of these questions?
 Nope.
