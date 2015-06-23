@@ -107,6 +107,13 @@ Use at your own risk, this code is young and has hopes and dreams of being battl
 ##### Why is this useful?
 Well, that really depends on what you're doing, but generally [distributed locks](https://en.wikipedia.org/wiki/Distributed_lock_manager) are useful to prevent [race conditions](https://en.wikipedia.org/wiki/Race_condition).
 
+##### How should I choose my key when locking?
+Lock keys should be a specific as possible to the critical block of code the lock is protecting. 
+
+For example, one use case of locking may be to prevent emailing a welcome email upon signing up for a service.:
+ - "send/email" - this is a terrible key to lock on, because it would affect all user emails across your entire code base. You would only be able to send one email at a time!
+ - "send/user-123456/welcome-email" - assuming that the "123456" part is the user's ID, this is actually a pretty good lock because if user "123457" signs up at the exact same time, no problem! The locks for each user are unique, and can be acquired concurrently.
+
 ##### Ephemeral?!
 So, you may be asking yourself, "I just double checked the definition for ephemeral, and dissapearing locks doen't sound too safe...wtf?" There is something to be said for not being too safe, if locks never dissapeared then what would happen if a [chaos monkey](http://techblog.netflix.com/2011/07/netflix-simian-army.html) came in and unplugged the server that acquired the lock? It would never be released, and you'd have to go in by hand and delete the lock in order to run your critical block of code.
 
