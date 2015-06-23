@@ -2,7 +2,7 @@
 
 Simple client for distributed locking built  on top of [python-consul](https://github.com/cablehead/python-consul).
 
-When running app servers in parallel, distributed locks come in handy on the rare occasion you need guarentees that only one server is running a particular block of code at a time. This library lets you do that in a straightforward way using [Consul](https://www.consul.io/) as the central authority for who owns the lock currently.
+When running app servers in parallel distributed locks come in handy on the rare occasion you need guarentees that only one server is running a particular block of code at the same time. This library lets you do that in a straightforward way using [Consul](https://www.consul.io/) as the central authority for who owns the lock currently.
 
 Installation
 ------------
