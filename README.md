@@ -126,3 +126,23 @@ Reentrant locking could be implemented since Consul's session API allows the sam
 
 ##### Has anyone actually asked any of these questions?
 Nope.
+
+
+Testing
+-------
+
+Execute the following commands in the root directory of this project to run the tests.
+
+##### Unit tests
+
+```
+python -m unittest -v consul_lock.tests.tests
+```
+
+##### Integration tests
+
+These tests need to actually connect to a Consul cluster and read/write data. Some of these are slow due to testing of timeouts.
+
+```
+CONSUL_LOCK_CONSUL_HOST="127.0.0.1" CONSUL_LOCK_CONSUL_PORT=8500 python -m unittest -v consul_lock.integration_tests.tests
+```
