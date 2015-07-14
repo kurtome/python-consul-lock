@@ -53,7 +53,7 @@ class EphemeralLockTests(TestCase):
         self.mock_consul.session.create.assert_called_once_with(
             lock_delay=0,
             ttl=defaults.lock_timeout_seconds,
-            behavior='destroy',
+            behavior='delete',
         )
         self.mock_consul.kv.put.assert_called_once_with(
             key=self.key,
@@ -88,7 +88,7 @@ class EphemeralLockTests(TestCase):
         mock_consul.session.create.assert_called_once_with(
             lock_delay=0,
             ttl=lock_timeout_seconds,
-            behavior='destroy',
+            behavior='delete',
         )
         mock_consul.kv.put.assert_called_once_with(
             key=self.key,
@@ -107,7 +107,7 @@ class EphemeralLockTests(TestCase):
             self.mock_consul.session.create.assert_called_once_with(
                 lock_delay=0,
                 ttl=defaults.lock_timeout_seconds,
-                behavior='destroy',
+                behavior='delete',
             )
             self.mock_consul.kv.put.assert_called_once_with(
                 key=self.key,
@@ -130,7 +130,7 @@ class EphemeralLockTests(TestCase):
         self.mock_consul.session.create.assert_called_once_with(
             lock_delay=0,
             ttl=defaults.lock_timeout_seconds,
-            behavior='destroy',
+            behavior='delete',
         )
         self.assertEquals([], self.mock_consul.kv.put.mock_calls)
         self.assertEquals([], self.mock_consul.session.destroy.mock_calls)
