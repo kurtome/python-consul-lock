@@ -1,4 +1,5 @@
 # Python Consul Lock
+[![Circle CI](https://circleci.com/gh/oysterbooks/python-consul-lock.svg?style=svg)](https://circleci.com/gh/oysterbooks/python-consul-lock)
 
 Simple client for distributed locking built  on top of [python-consul](https://github.com/cablehead/python-consul).
 
