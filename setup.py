@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='consul-lock',
-    version='0.1.5',
+    version='0.1.6',
     description='Distributed locking built on top of Consul.',
     url='http://github.com/oysterbooks/python-consul-lock',
     author='Oyster',
