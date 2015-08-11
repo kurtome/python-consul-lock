@@ -1,4 +1,7 @@
 # Python Consul Lock
+
+Read this issue before using! https://github.com/oysterbooks/python-consul-lock/issues/4
+
 [![Circle CI](https://circleci.com/gh/oysterbooks/python-consul-lock.svg?style=svg)](https://circleci.com/gh/oysterbooks/python-consul-lock)
 
 Simple client for distributed locking built  on top of [python-consul](https://github.com/cablehead/python-consul).
@@ -105,7 +108,7 @@ FAQ
 ---
 
 ##### Is this "production ready"?
-Use at your own risk, this code is young and has hopes and dreams of being battletested and rugged someday. Oyster has been using this in production since tag [0.1.4](https://github.com/oysterbooks/python-consul-lock/tree/0.1.4).
+Use at your own risk, the locks the Consul supports via it's Sessions and Key/Value store weren't meant to be used for short lived locks, see [this issue](https://github.com/oysterbooks/python-consul-lock/issues/4) for more details. Test it out in your own setup with your expected usage pattern before using in a production system!
 
 ##### Why is this useful?
 Well, that really depends on what you're doing, but generally [distributed locks](https://en.wikipedia.org/wiki/Distributed_lock_manager) are useful to prevent [race conditions](https://en.wikipedia.org/wiki/Race_condition).
