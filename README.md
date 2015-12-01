@@ -1,3 +1,6 @@
+#### ¡ NOTICE !
+This project is not being actively maintained, but it should serve as a good reference point for anyone interested in the same creating a fluent Python API for locking in Consul. (Just watch out for [this issue](https://github.com/oysterbooks/python-consul-lock/issues/4).) Feel free to fork, or let me know if you are interested in taking over the project and maintaining it.
+
 # Python Consul Lock
 
 Read this issue before using! https://github.com/oysterbooks/python-consul-lock/issues/4
