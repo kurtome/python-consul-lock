@@ -1,4 +1,11 @@
+#### ¡ NOTICE !
+This project is not being actively maintained, but it should serve as a good reference point for anyone interested in the same creating a fluent Python API for locking in Consul. (Just watch out for [this issue](https://github.com/oysterbooks/python-consul-lock/issues/4).) Feel free to fork, or let me know if you are interested in taking over the project and maintaining it.
+
 # Python Consul Lock
+
+Read this issue before using! https://github.com/oysterbooks/python-consul-lock/issues/4
+
+[![Circle CI](https://circleci.com/gh/oysterbooks/python-consul-lock.svg?style=svg)](https://circleci.com/gh/oysterbooks/python-consul-lock)
 
 Simple client for distributed locking built  on top of [python-consul](https://github.com/cablehead/python-consul).
 
@@ -93,7 +100,7 @@ Most of these settings can be both configured in `consul_locks.defaults` and ove
 
  - `acquire_timeout_ms` - How long, in milliseconds, the caller is willing to wait to acquire the lock. When set to 0 lock acquisition will fail if the lock cannot be acquired immediately. (default = 0)
 
- - `lock_timeout_seconds` - How long, in seconds, the lock will stay alive if it is never released, this is controlled by Consul's Session TTL and may stay alive a bit longer according to their docs. As of the current version of Consul, this must be between 10 and 3600. (default = 180)
+ - `lock_timeout_seconds` - How long, in seconds, the lock will stay alive if it is never released, this is controlled by Consul's Session TTL and may stay alive a bit longer according to their docs. As of the current version of Consul, this must be between 10 and 86400. (default = 180)
 
  - `lock_key_pattern` - A format string which will be combined with the `key` parameter for each lock to determine the full key path in Consul's key/value store. Useful for setting up a prefix path which all locks live under. This can only be set in `consul_locks.defaults`. (default = `'locks/ephemeral/%s'`)
 
@@ -104,7 +111,7 @@ FAQ
 ---
 
 ##### Is this "production ready"?
-Use at your own risk, this code is young and has hopes and dreams of being battletested and rugged someday. Oyster has been using this in production since tag [0.1.4](https://github.com/oysterbooks/python-consul-lock/tree/0.1.4).
+Use at your own risk, the locks the Consul supports via it's Sessions and Key/Value store weren't meant to be used for short lived locks, see [this issue](https://github.com/oysterbooks/python-consul-lock/issues/4) for more details. Test it out in your own setup with your expected usage pattern before using in a production system!
 
 ##### Why is this useful?
 Well, that really depends on what you're doing, but generally [distributed locks](https://en.wikipedia.org/wiki/Distributed_lock_manager) are useful to prevent [race conditions](https://en.wikipedia.org/wiki/Race_condition).

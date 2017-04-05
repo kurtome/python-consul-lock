@@ -9,7 +9,7 @@ setup(
     author_email='engineering@oysterbooks.com',
     license='MIT',
     packages=['consul_lock'],
-    tests_requires=['mock'],
+    tests_require=['mock'],
     install_requires=['python-consul'],
     zip_safe=True
 )
