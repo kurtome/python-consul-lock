@@ -31,7 +31,7 @@ class IntegrationTests(TestCase):
         super(IntegrationTests, cls).setUpClass()
         cls.consul_client = get_consul_client()
         defaults.consul_client = cls.consul_client
-        print cls.consul_client
+        print(cls.consul_client)
 
     def setUp(self):
         super(IntegrationTests, self).setUp()

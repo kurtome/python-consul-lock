@@ -132,6 +132,6 @@ class EphemeralLockTests(TestCase):
             ttl=defaults.lock_timeout_seconds,
             behavior='delete',
         )
-        self.assertEquals([], self.mock_consul.kv.put.mock_calls)
-        self.assertEquals([], self.mock_consul.session.destroy.mock_calls)
+        self.assertEqual([], self.mock_consul.kv.put.mock_calls)
+        self.assertEqual([], self.mock_consul.session.destroy.mock_calls)
 
