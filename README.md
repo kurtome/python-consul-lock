@@ -100,7 +100,7 @@ Most of these settings can be both configured in `consul_locks.defaults` and ove
 
  - `acquire_timeout_ms` - How long, in milliseconds, the caller is willing to wait to acquire the lock. When set to 0 lock acquisition will fail if the lock cannot be acquired immediately. (default = 0)
 
- - `lock_timeout_seconds` - How long, in seconds, the lock will stay alive if it is never released, this is controlled by Consul's Session TTL and may stay alive a bit longer according to their docs. As of the current version of Consul, this must be between 10 and 3600. (default = 180)
+ - `lock_timeout_seconds` - How long, in seconds, the lock will stay alive if it is never released, this is controlled by Consul's Session TTL and may stay alive a bit longer according to their docs. As of the current version of Consul, this must be between 10 and 86400. (default = 180)
 
  - `lock_key_pattern` - A format string which will be combined with the `key` parameter for each lock to determine the full key path in Consul's key/value store. Useful for setting up a prefix path which all locks live under. This can only be set in `consul_locks.defaults`. (default = `'locks/ephemeral/%s'`)
 
