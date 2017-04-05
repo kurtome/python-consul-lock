@@ -49,7 +49,7 @@ class EphemeralLock(object):
         :param acquire_timeout_ms: how long the caller is willing to wait to acquire the lock
         :param lock_timeout_seconds: how long the lock will stay alive if it is never released,
             this is controlled by Consul's Session TTL and may stay alive a bit longer according
-            to their docs. As of the current version of Consul, this must be between 10s and 3600s
+            to their docs. As of the current version of Consul, this must be between 10s and 86400s
         :param consul_client: client to use instead of the one defined in Settings
         """
         self._consul = _coerce_required(consul_client, 'consul_client')
@@ -62,7 +62,7 @@ class EphemeralLock(object):
         self.session_id = None
         self._started_locking = False
         assert self.lock_timeout_seconds >= 10 and self.lock_timeout_seconds <= 86400, \
-            'lock_timeout_seconds must be between 10 and 3600 to due to Consul\'s session ttl settings'
+            'lock_timeout_seconds must be between 10 and 86400 to due to Consul\'s session ttl settings'
 
 
     def acquire(self, fail_hard=True):
