@@ -1,6 +1,6 @@
 import time
 import contextlib
-import defaults
+from . import defaults
 
 import consul
 
