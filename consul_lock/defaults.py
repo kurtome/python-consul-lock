@@ -16,6 +16,8 @@ lock_key_pattern = 'locks/ephemeral/%s'
 
 import json
 from datetime import datetime
+
+
 def _json_date_value():
     return json.dumps(dict(
         locked_at=str(datetime.now())
