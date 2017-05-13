@@ -1,8 +1,8 @@
 
-from lock_impl import EphemeralLock
+from consul_lock.lock_impl import EphemeralLock
 
-from lock_impl import ConsulLockException
-from lock_impl import LockAcquisitionException
+from consul_lock.lock_impl import ConsulLockException
+from consul_lock.lock_impl import LockAcquisitionException
 
-import defaults
+from consul_lock import defaults
 

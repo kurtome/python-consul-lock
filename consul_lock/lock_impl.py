@@ -1,17 +1,17 @@
 import time
 import contextlib
-import defaults
+from consul_lock import defaults
 
 import consul
+
 
 class ConsulLockException(consul.ConsulException):
     # Extends the base ConsulException in case caller wants to group the exception handling together
     pass
 
+
 class LockAcquisitionException(ConsulLockException):
     pass
-
-
 
 
 def _coerce_required(value, attr_name):
@@ -40,10 +40,10 @@ class EphemeralLock(object):
     """
 
     def __init__(self,
-            key,
-            acquire_timeout_ms=None,
-            lock_timeout_seconds=None,
-            consul_client=None):
+                 key,
+                 acquire_timeout_ms=None,
+                 lock_timeout_seconds=None,
+                 consul_client=None):
         """
         :param key: the unique key to lock
         :param acquire_timeout_ms: how long the caller is willing to wait to acquire the lock
@@ -63,7 +63,6 @@ class EphemeralLock(object):
         self._started_locking = False
         assert self.lock_timeout_seconds >= 10 and self.lock_timeout_seconds <= 86400, \
             'lock_timeout_seconds must be between 10 and 86400 to due to Consul\'s session ttl settings'
-
 
     def acquire(self, fail_hard=True):
         """
@@ -101,7 +100,7 @@ class EphemeralLock(object):
 
         is_success = False
 
-        max_loop_iter = 1000 #  don't loop forever
+        max_loop_iter = 1000  # don't loop forever
         for attempt_number in range(0, max_loop_iter):
             is_success = self._acquire_consul_key()
 

@@ -1,3 +1,16 @@
+machine:
+  post:
+    - pyenv global 2.7.12 3.4.4 3.5.2 3.6.0
+
+dependencies:
+  pre:
+    - pip3.4 install -r requirements.txt
+    - pip3.5 install -r requirements.txt
+    - pip3.6 install -r requirements.txt
+
 test:
     override:
-        - python -m unittest discover -v consul_lock.tests
+        - python2.7 -m unittest discover -v consul_lock.tests
+        - python3.4 -m unittest discover -v consul_lock.tests
+        - python3.5 -m unittest discover -v consul_lock.tests
+        - python3.6 -m unittest discover -v consul_lock.tests
