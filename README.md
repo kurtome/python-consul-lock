@@ -31,7 +31,7 @@ lock is never released due to code crashes.
 No guarentees are made about the behavior if a client continues to hold
 the lock for longer than its maximum lifespan (`lock_timeout_seconds`), Consul will release the lock at some point soon after the timeout. This is a good in thing, it is in fact the entire point of an ephemeral lock, because it makes it nearly impossible for stale locks to gum up whatever you are processing. The ideal setup if to configure the `lock_timeout_seconds` to be just long enough that there is no way your critical block could still be running, so it's safe enough to assume that the code that originally acquired the lock simply died.
 
-The ephemeral lock is implemented with Consul's [session](http://python-consul.readthedocs.org/en/latest/#consul-session) and [kv] (http://python-consul.readthedocs.org/en/latest/#consul-kv) API and the key/value associated with the lock will be deleted upon release.
+The ephemeral lock is implemented with Consul's [session](http://python-consul.readthedocs.org/en/latest/#consul-session) and [kv](http://python-consul.readthedocs.org/en/latest/#consul-kv) API and the key/value associated with the lock will be deleted upon release.
 
 ### Examples
 
