@@ -1,11 +1,9 @@
 #### ¡ NOTICE !
-This project is not being actively maintained, but it should serve as a good reference point for anyone interested in the same creating a fluent Python API for locking in Consul. (Just watch out for [this issue](https://github.com/oysterbooks/python-consul-lock/issues/4).) Feel free to fork, or let me know if you are interested in taking over the project and maintaining it.
+This project is not being actively maintained, but it should serve as a good reference point for anyone interested in the same creating a fluent Python API for locking in Consul. (Just watch out for [this issue](https://github.com/kurtome/python-consul-lock/issues/4).) Feel free to fork, or let me know if you are interested in taking over the project and maintaining it.
 
 # Python Consul Lock
 
-Read this issue before using! https://github.com/oysterbooks/python-consul-lock/issues/4
-
-[![Circle CI](https://circleci.com/gh/oysterbooks/python-consul-lock.svg?style=svg)](https://circleci.com/gh/oysterbooks/python-consul-lock)
+Read this issue before using! https://github.com/kurtome/python-consul-lock/issues/4
 
 Simple client for distributed locking built  on top of [python-consul](https://github.com/cablehead/python-consul).
 
@@ -13,6 +11,7 @@ When running app servers in parallel distributed locks come in handy on the rare
 
 Installation
 ------------
+
 ```
 pip install consul-lock
 ```
